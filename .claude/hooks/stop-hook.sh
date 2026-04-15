@@ -5,10 +5,12 @@
 # Claude가 응답을 완료했을 때 Slack 알림을 보냅니다.
 
 # .env 파일에서 Slack 웹훅 URL 로드
-if [ -f "$CLAUDE_PROJECT_DIR/.env" ]; then
+if [ -f "$CLAUDE_PROJECT_DIR/.env.local" ]; then
+    source "$CLAUDE_PROJECT_DIR/.env.local"
+elif [ -f "$CLAUDE_PROJECT_DIR/.env" ]; then
     source "$CLAUDE_PROJECT_DIR/.env"
 else
-    echo "오류: .env 파일을 찾을 수 없습니다: $CLAUDE_PROJECT_DIR/.env" >&2
+    echo "오류: .env.local 파일을 찾을 수 없습니다: $CLAUDE_PROJECT_DIR/.env.local" >&2
     exit 1
 fi
 
