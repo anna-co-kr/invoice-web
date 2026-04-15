@@ -31,6 +31,9 @@ const envSchema = z.object({
     .length(32, 'SESSION_SECRET은 정확히 32자여야 합니다'),
 })
 
+// Next.js 빌드 타임에는 서버 전용 환경변수 검증을 건너뜀
+const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build'
+
 export const env = envSchema.parse({
   NODE_ENV: process.env.NODE_ENV,
   VERCEL_URL: process.env.VERCEL_URL,
@@ -38,8 +41,12 @@ export const env = envSchema.parse({
   NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   NOTION_API_KEY: process.env.NOTION_API_KEY,
   NOTION_DATABASE_ID: process.env.NOTION_DATABASE_ID,
-  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
-  SESSION_SECRET: process.env.SESSION_SECRET,
+  ADMIN_PASSWORD:
+    process.env.ADMIN_PASSWORD ??
+    (isBuildPhase ? 'build-placeholder' : undefined),
+  SESSION_SECRET:
+    process.env.SESSION_SECRET ??
+    (isBuildPhase ? 'build-phase-placeholder-12345678' : undefined),
 })
 
 // 프로덕션 환경 보안 검증
