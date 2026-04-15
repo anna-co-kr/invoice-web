@@ -93,12 +93,13 @@ export function formatCurrency(
  * @returns 한국어 상태 텍스트
  */
 export function formatInvoiceStatus(
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'pending' | 'shared' | 'confirmed' | 'cancelled'
 ): string {
   const statusMap = {
     pending: '대기',
-    approved: '승인',
-    rejected: '거절',
+    shared: '공유완료',
+    confirmed: '확정',
+    cancelled: '취소',
   }
 
   return statusMap[status] || status

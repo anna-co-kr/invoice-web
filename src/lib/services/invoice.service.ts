@@ -335,8 +335,9 @@ export async function searchInvoices(
       // InvoiceStatus -> Notion 상태 값 매핑
       const statusMap: Record<InvoiceStatus, string> = {
         pending: '대기',
-        approved: '승인',
-        rejected: '거절',
+        shared: '공유완료',
+        confirmed: '확정',
+        cancelled: '취소',
       }
 
       notionFilters.push({

@@ -5,12 +5,13 @@
 
 /**
  * 견적서 상태 상수
- * CSV 데이터 기반: "대기", "승인", "거절"
+ * Notion DB 기반: 대기/공유완료/확정/취소
  */
 export const INVOICE_STATUS = {
   PENDING: 'pending',
-  APPROVED: 'approved',
-  REJECTED: 'rejected',
+  SHARED: 'shared',
+  CONFIRMED: 'confirmed',
+  CANCELLED: 'cancelled',
 } as const
 
 export type InvoiceStatusKey = keyof typeof INVOICE_STATUS
@@ -22,8 +23,9 @@ export type InvoiceStatusValue = (typeof INVOICE_STATUS)[InvoiceStatusKey]
  */
 export const INVOICE_STATUS_LABELS = {
   pending: '대기',
-  approved: '승인',
-  rejected: '거절',
+  shared: '공유완료',
+  confirmed: '확정',
+  cancelled: '취소',
 } as const
 
 /**
@@ -31,8 +33,9 @@ export const INVOICE_STATUS_LABELS = {
  */
 export const KOREAN_TO_STATUS_MAP = {
   대기: 'pending',
-  승인: 'approved',
-  거절: 'rejected',
+  공유완료: 'shared',
+  확정: 'confirmed',
+  취소: 'cancelled',
 } as const
 
 /**

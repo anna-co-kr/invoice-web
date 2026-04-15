@@ -30,8 +30,9 @@ const statusConfig: Record<
   { label: string; variant: 'default' | 'secondary' | 'destructive' }
 > = {
   pending: { label: '대기', variant: 'default' },
-  approved: { label: '승인', variant: 'secondary' },
-  rejected: { label: '거절', variant: 'destructive' },
+  shared: { label: '공유완료', variant: 'secondary' },
+  confirmed: { label: '확정', variant: 'secondary' },
+  cancelled: { label: '취소', variant: 'destructive' },
 }
 
 /**

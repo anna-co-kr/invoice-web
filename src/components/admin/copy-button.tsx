@@ -31,13 +31,14 @@ export function CopyButton({ text, label = '링크 복사' }: CopyButtonProps) {
             size="icon"
             onClick={() => copy(text)}
             className="h-8 w-8"
+            aria-label={isCopied ? '복사됨' : label}
           >
             {isCopied ? (
               <Check className="h-4 w-4 text-green-600" />
             ) : (
               <Copy className="h-4 w-4" />
             )}
-            <span className="sr-only">{label}</span>
+            <span className="sr-only">{isCopied ? '복사됨' : label}</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent>

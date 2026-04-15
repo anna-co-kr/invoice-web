@@ -5,9 +5,9 @@
 
 /**
  * 견적서 상태 타입
- * CSV 데이터 기반: "대기", "승인", "거절"
+ * Notion DB 기반: 대기/공유완료/확정/취소
  */
-export type InvoiceStatus = 'pending' | 'approved' | 'rejected'
+export type InvoiceStatus = 'pending' | 'shared' | 'confirmed' | 'cancelled'
 
 /**
  * 견적 항목 인터페이스

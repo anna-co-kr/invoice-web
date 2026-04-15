@@ -29,14 +29,28 @@ export async function generateMetadata({
 
   try {
     const invoice = await getOptimizedInvoice(id)
+    const { NEXT_PUBLIC_BASE_URL, VERCEL_URL } = (await import('@/lib/env')).env
+    const baseUrl =
+      NEXT_PUBLIC_BASE_URL === 'http://localhost:3000' && VERCEL_URL
+        ? `https://${VERCEL_URL}`
+        : NEXT_PUBLIC_BASE_URL
+    const pageUrl = `${baseUrl}/invoice/${id}`
+    const title = `견적서 ${invoice.invoiceNumber}`
+    const description = `${invoice.clientName}님의 견적서 · 총액 ${formatCurrency(invoice.totalAmount)}`
 
     return {
-      title: `견적서 ${invoice.invoiceNumber}`,
-      description: `${invoice.clientName}님의 견적서 - 총액: ${formatCurrency(invoice.totalAmount)}`,
+      title,
+      description,
       openGraph: {
-        title: `견적서 ${invoice.invoiceNumber}`,
-        description: `${invoice.clientName}님의 견적서`,
+        title,
+        description,
+        url: pageUrl,
         type: 'website',
+      },
+      twitter: {
+        card: 'summary',
+        title,
+        description,
       },
     }
   } catch {

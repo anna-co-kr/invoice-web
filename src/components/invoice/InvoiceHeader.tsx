@@ -27,10 +27,11 @@ export function InvoiceHeader({ invoice, className }: InvoiceHeaderProps) {
     status: Invoice['status']
   ): 'default' | 'destructive' | 'secondary' => {
     switch (status) {
-      case 'approved':
+      case 'confirmed':
         return 'default'
-      case 'rejected':
+      case 'cancelled':
         return 'destructive'
+      case 'shared':
       case 'pending':
       default:
         return 'secondary'
