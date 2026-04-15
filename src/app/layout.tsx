@@ -1,22 +1,15 @@
 import type { Metadata } from 'next'
-import { Geist_Mono, Noto_Sans_KR } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 
-// 한글 폰트 최적화: Noto Sans KR (Google Fonts)
-const notoSansKR = Noto_Sans_KR({
-  subsets: ['latin'],
+// Pretendard Variable 폰트 (로컬)
+const pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
-  variable: '--font-noto-sans-kr',
-  preload: true,
-  fallback: ['system-ui', 'sans-serif'],
-  weight: ['400', '500', '700'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: '--font-pretendard',
+  weight: '100 900',
 })
 
 export const metadata: Metadata = {
@@ -31,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning className={notoSansKR.variable}>
-      <body className={`${geistMono.variable} font-sans antialiased`}>
+    <html lang="ko" suppressHydrationWarning className={pretendard.variable}>
+      <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
