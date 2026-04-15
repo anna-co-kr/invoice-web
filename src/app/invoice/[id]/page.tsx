@@ -5,6 +5,7 @@ import { InvoiceTable } from '@/components/invoice/InvoiceTable'
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary'
 import { PDFDownloadButton } from '@/components/invoice/PDFDownloadButton'
 import { InvoiceSkeleton } from '@/components/invoice/InvoiceSkeleton'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { getOptimizedInvoice } from '@/lib/services/invoice.service'
 import { notFound } from 'next/navigation'
 import { Separator } from '@/components/ui/separator'
@@ -89,12 +90,17 @@ async function InvoiceContent({ id }: { id: string }) {
         <div className="container mx-auto px-4 py-8 sm:py-12">
           {/* 페이지 타이틀 */}
           <div className="mx-auto mb-6 max-w-3xl">
-            <h1 className="text-foreground text-3xl font-bold sm:text-4xl">
-              견적서 조회
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              견적서의 상세 내용을 확인하실 수 있습니다.
-            </p>
+            <div className="flex items-start justify-between">
+              <div>
+                <h1 className="text-foreground text-3xl font-bold sm:text-4xl">
+                  견적서 조회
+                </h1>
+                <p className="text-muted-foreground mt-2">
+                  견적서의 상세 내용을 확인하실 수 있습니다.
+                </p>
+              </div>
+              <ThemeToggle />
+            </div>
           </div>
 
           {/* 견적서 콘텐츠 */}
