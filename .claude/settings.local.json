@@ -11,7 +11,12 @@
       "mcp__sequential-thinking",
       "mcp__shadcn",
       "mcp__context7",
-      "mcp__shrimp-task-manager"
+      "mcp__shrimp-task-manager",
+      "mcp__claude_ai_Notion__notion-search",
+      "mcp__claude_ai_Notion__notion-fetch",
+      "mcp__claude_ai_Notion__notion-create-database",
+      "mcp__claude_ai_Notion__notion-create-pages",
+      "mcp__claude_ai_Notion__notion-move-pages"
     ],
     "deny": [],
     "ask": []
