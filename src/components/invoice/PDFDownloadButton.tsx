@@ -58,10 +58,12 @@ export function PDFDownloadButton({
       const a = document.createElement('a')
       a.href = url
       a.download = `invoice-${sanitizeFilename(invoice.invoiceNumber)}.pdf`
+      document.body.appendChild(a)
       a.click()
+      document.body.removeChild(a)
 
-      // 5단계: 리소스 정리
-      URL.revokeObjectURL(url)
+      // 5단계: 리소스 정리 (다운로드 시작 후 지연 해제)
+      setTimeout(() => URL.revokeObjectURL(url), 150)
 
       toast.success('PDF 다운로드가 완료되었습니다')
     } catch (error) {

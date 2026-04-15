@@ -3,6 +3,7 @@
  * @react-pdf/renderer를 사용한 견적서 PDF 생성 컴포넌트
  */
 
+import path from 'path'
 import {
   Document,
   Page,
@@ -14,17 +15,32 @@ import {
 import type { Invoice } from '@/types/invoice'
 import { formatDate, formatCurrency } from '@/lib/format'
 
-// 한글 폰트 등록 (Google Fonts CDN 사용)
+// 한글 폰트 등록 (로컬 pretendard TTF — CDN 의존성 제거)
 Font.register({
-  family: 'NotoSansKR',
-  src: 'https://fonts.gstatic.com/s/notosanskr/v36/PbyxFmXiEBPT4ITbgNA5Cgms3VYcOA-vvnIzzuoyeLTq8H4hfeE.ttf',
+  family: 'Pretendard',
+  fonts: [
+    {
+      src: path.join(
+        process.cwd(),
+        'node_modules/pretendard/dist/public/static/alternative/Pretendard-Regular.ttf'
+      ),
+      fontWeight: 400,
+    },
+    {
+      src: path.join(
+        process.cwd(),
+        'node_modules/pretendard/dist/public/static/alternative/Pretendard-Bold.ttf'
+      ),
+      fontWeight: 700,
+    },
+  ],
 })
 
 // PDF 스타일 정의
 const styles = StyleSheet.create({
   page: {
     padding: 40,
-    fontFamily: 'NotoSansKR',
+    fontFamily: 'Pretendard',
     fontSize: 10,
     lineHeight: 1.5,
   },

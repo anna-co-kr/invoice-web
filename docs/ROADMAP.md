@@ -126,6 +126,14 @@
   - ✅ vercel.json 프로덕션 설정 강화 (리전, 캐시 헤더)
   - ✅ 환경변수 설정 가이드 문서화
 
+### Phase 9: 버그 수정 ✅
+
+- **Task 025: PDF 다운로드 기능 오류 수정** ✅ - 완료
+  - ✅ `@react-pdf/renderer` default export 대신 named export `renderToBuffer` 사용 (`src/app/api/generate-pdf/route.ts`)
+  - ✅ `toBlob()` → `renderToBuffer()` 교체 (브라우저 전용 → 서버 전용 API)
+  - ✅ Google Fonts CDN NotoSansKR 폰트 → 로컬 pretendard TTF 파일로 교체 (`src/components/pdf/InvoiceTemplate.tsx`)
+  - ✅ `URL.revokeObjectURL()` 즉시 호출 → `setTimeout` 150ms 지연 처리 (`src/components/invoice/PDFDownloadButton.tsx`)
+
 ## 작업별 상세 구현 사항
 
 ### Task 013: 관리자 레이아웃 및 인증 시스템 구현
@@ -395,4 +403,4 @@ graph TD
 **📝 문서 버전**: v4.0
 **📅 최종 업데이트**: 2026-04-16
 **🎯 목표**: MVP 기반 고도화를 통한 사용자 경험 혁신 및 관리 효율성 극대화
-**📊 진행 상황**: Phase 5~8 전체 완료 (12/12 Tasks 완료 - 100%) 🎉
+**📊 진행 상황**: Phase 5~9 전체 완료 (13/13 Tasks 완료 - 100%) 🎉

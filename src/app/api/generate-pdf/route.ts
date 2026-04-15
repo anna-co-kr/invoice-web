@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createElement } from 'react'
-import ReactPDF from '@react-pdf/renderer'
+import { renderToBuffer } from '@react-pdf/renderer'
 import { InvoicePDFDocument } from '@/components/pdf/InvoiceTemplate'
 import type { Invoice } from '@/types/invoice'
 import { ERROR_MESSAGES, PDF_CONFIG } from '@/lib/constants'
@@ -31,19 +31,15 @@ export async function POST(req: NextRequest) {
     // 3단계: PDF Document 생성
     const pdfDoc = createElement(InvoicePDFDocument, { invoice })
 
-    // 4단계: PDF Blob 생성
+    // 4단계: PDF Buffer 생성 (서버 환경 전용 named export API)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const blob = await ReactPDF.pdf(pdfDoc as any).toBlob()
+    const buffer = await renderToBuffer(pdfDoc as any)
 
-    // 5단계: Blob을 ArrayBuffer로 변환
-    const arrayBuffer = await blob.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    // 6단계: 파일명 생성
+    // 5단계: 파일명 생성
     const filename = `${PDF_CONFIG.FILENAME_PREFIX}-${sanitizeFilename(invoice.invoiceNumber)}.pdf`
 
-    // 7단계: 응답 반환
-    return new NextResponse(buffer, {
+    // 6단계: 응답 반환
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${filename}"`,
