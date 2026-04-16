@@ -7,6 +7,7 @@ import { createCachedInvoiceFetcher, getInvoiceWithDedup } from '@/lib/cache'
 import { ERROR_MESSAGES } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { getDataSourceId, notion } from '@/lib/notion'
+import { getClientById } from '@/lib/services/client.service'
 import { transformNotionToInvoice } from '@/lib/utils/notion-parser'
 import type { Invoice, InvoiceStatus } from '@/types/invoice'
 import type {
@@ -291,6 +292,46 @@ export async function getInvoicesFromNotion(
     })
     throw new Error('견적서 목록을 불러올 수 없습니다')
   }
+}
+
+/**
+ * 클라이언트 ID로 해당 클라이언트의 견적서 목록 조회
+ * Clients DB의 invoices relation에서 invoice ID들을 가져와 각 견적서 조회
+ * @param clientId - Notion Clients DB 페이지 ID (클라이언트 포털 세션의 clientId)
+ * @returns 클라이언트 견적서 배열 (발행일 내림차순)
+ */
+export async function getInvoicesByClientId(
+  clientId: string
+): Promise<Invoice[]> {
+  // 1. 클라이언트 조회하여 invoiceIds 가져오기
+  const client = await getClientById(clientId)
+
+  if (!client || client.invoiceIds.length === 0) {
+    return []
+  }
+
+  // 2. invoiceIds 배열로 각 견적서 병렬 조회 (Promise.allSettled로 일부 실패 허용)
+  const results = await Promise.allSettled(
+    client.invoiceIds.map(id => getInvoiceFromNotion(id))
+  )
+
+  // 3. 성공한 결과만 필터링
+  const invoices = results
+    .filter(
+      (r): r is PromiseFulfilledResult<Invoice> => r.status === 'fulfilled'
+    )
+    .map(r => r.value)
+
+  // 실패한 항목 경고 로그
+  const failedCount = results.filter(r => r.status === 'rejected').length
+  if (failedCount > 0) {
+    logger.warn('클라이언트 견적서 일부 조회 실패', { clientId, failedCount })
+  }
+
+  // 4. 발행일 내림차순 정렬 후 반환
+  return invoices.sort(
+    (a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
+  )
 }
 
 /**

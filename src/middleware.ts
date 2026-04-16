@@ -2,6 +2,7 @@
  * Next.js Middleware
  * 1. API 라우트에 대한 Rate Limiting 적용
  * 2. 관리자 페이지 인증 검사
+ * 3. 클라이언트 포털 인증 검사
  */
 
 import { NextResponse } from 'next/server'
@@ -20,20 +21,54 @@ const RATE_LIMIT_CONFIG = {
 } as const
 
 /**
- * JWT 세션 검증을 위한 시크릿 키
+ * 관리자 JWT 세션 검증을 위한 시크릿 키
  */
 const SESSION_SECRET = new TextEncoder().encode(
   process.env.SESSION_SECRET || ''
 )
 
 /**
+ * 클라이언트 포털 JWT 세션 검증을 위한 시크릿 키
+ * 관리자 SESSION_SECRET과 완전히 분리된 별도 시크릿
+ */
+const CLIENT_SESSION_SECRET = new TextEncoder().encode(
+  process.env.CLIENT_JWT_SECRET || ''
+)
+
+/** 클라이언트 세션 쿠키 이름 */
+const CLIENT_SESSION_COOKIE_NAME = 'client_session'
+
+/**
  * Middleware 함수
- * 1. API 라우트: Rate Limiting 적용
- * 2. 관리자 페이지: 인증 검사
+ * 1. 클라이언트 포털: 인증 검사 (/client/*)
+ * 2. 관리자 페이지: 인증 검사 (/admin/*)
+ * 3. API 라우트: Rate Limiting 적용 (/api/*)
  */
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // 클라이언트 포털 인증 검사 (/client-login 제외)
+  // /client-login URL 패턴: (client-auth)/client-login/page.tsx → /client-login
+  if (pathname.startsWith('/client') && !pathname.startsWith('/client-login')) {
+    const clientToken = request.cookies.get(CLIENT_SESSION_COOKIE_NAME)?.value
+
+    // 쿠키가 없으면 로그인 페이지로 리다이렉트
+    if (!clientToken) {
+      return NextResponse.redirect(new URL('/client-login', request.url))
+    }
+
+    try {
+      // 클라이언트 JWT 검증
+      await jwtVerify(clientToken, CLIENT_SESSION_SECRET)
+      return NextResponse.next()
+    } catch {
+      // JWT 검증 실패 (만료, 변조 등) - 클라이언트 로그인 페이지로 리다이렉트
+      return NextResponse.redirect(new URL('/client-login', request.url))
+    }
+  }
+
   // 관리자 페이지 인증 검사
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  if (pathname.startsWith('/admin')) {
     // 세션 확인
     const token = request.cookies.get('admin_session')?.value
 
@@ -108,7 +143,8 @@ export async function middleware(request: NextRequest) {
  * Middleware 적용 경로 설정
  * 1. API 라우트 (/api/*)
  * 2. 관리자 페이지 (/admin/*)
+ * 3. 클라이언트 포털 (/client/*)
  */
 export const config = {
-  matcher: ['/api/:path*', '/admin/:path*'],
+  matcher: ['/api/:path*', '/admin/:path*', '/client/:path*'],
 }

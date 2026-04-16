@@ -49,6 +49,17 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        // 클라이언트 포털 (로그인 포함): 검색 엔진 인덱싱 차단 + 캐시 비허용
+        source: '/(client|client-login)(.*)',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+          {
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate',
+          },
+        ],
+      },
     ]
   },
 }

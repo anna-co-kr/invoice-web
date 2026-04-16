@@ -66,3 +66,13 @@ export const CURRENCY_FORMAT = {
   CURRENCY: 'KRW',
   SYMBOL: '₩',
 } as const
+
+/**
+ * 클라이언트 포털 세션 관련 상수
+ */
+
+/** 클라이언트 세션 쿠키 이름 (관리자 'admin_session'과 분리) */
+export const CLIENT_SESSION_COOKIE_NAME = 'client_session' as const
+
+/** 클라이언트 세션 만료 시간 (7일, 초 단위) */
+export const CLIENT_SESSION_MAX_AGE = 60 * 60 * 24 * 7

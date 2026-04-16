@@ -29,6 +29,13 @@ const envSchema = z.object({
   SESSION_SECRET: z
     .string()
     .length(32, 'SESSION_SECRET은 정확히 32자여야 합니다'),
+  // 클라이언트 포털 환경변수
+  NOTION_CLIENTS_DATABASE_ID: z
+    .string()
+    .min(1, '클라이언트 Notion DB ID가 필요합니다'),
+  CLIENT_JWT_SECRET: z
+    .string()
+    .length(32, '클라이언트 JWT 시크릿은 정확히 32자여야 합니다'),
 })
 
 // Next.js 빌드 타임에는 서버 전용 환경변수 검증을 건너뜀
@@ -47,6 +54,12 @@ export const env = envSchema.parse({
   SESSION_SECRET:
     process.env.SESSION_SECRET ??
     (isBuildPhase ? 'build-phase-placeholder-12345678' : undefined),
+  NOTION_CLIENTS_DATABASE_ID:
+    process.env.NOTION_CLIENTS_DATABASE_ID ??
+    (isBuildPhase ? 'clients-placeholder-db-id-000000' : undefined),
+  CLIENT_JWT_SECRET:
+    process.env.CLIENT_JWT_SECRET ??
+    (isBuildPhase ? 'client-jwt-secret-placeholder-12' : undefined),
 })
 
 // 프로덕션 환경 보안 검증
