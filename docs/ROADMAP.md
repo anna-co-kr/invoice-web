@@ -142,11 +142,11 @@
 
 **구현 내용**:
 
-- `/app/admin/layout.tsx` - 관리자 전용 레이아웃
-- `/app/admin/login/page.tsx` - 로그인 페이지
-- `/middleware.ts` - 인증 미들웨어
-- `/lib/auth/session.ts` - 세션 관리 유틸리티
-- `/components/admin/AdminNav.tsx` - 관리자 네비게이션
+- `src/app/admin/layout.tsx` - 관리자 전용 레이아웃
+- `src/app/(auth)/admin-login/page.tsx` - 로그인 페이지
+- `src/middleware.ts` - 인증 미들웨어
+- `src/lib/auth/session.ts` - 세션 관리 유틸리티
+- `src/components/admin/admin-nav.tsx` - 관리자 네비게이션
 
 **완료 기준**:
 
@@ -161,10 +161,9 @@
 
 **구현 내용**:
 
-- `/app/admin/invoices/page.tsx` - 견적서 목록 페이지
-- `/lib/services/invoice-list.service.ts` - 목록 조회 서비스
-- `/components/admin/InvoiceTable.tsx` - 견적서 테이블 컴포넌트
-- `/components/admin/StatusBadge.tsx` - 상태 표시 배지
+- `src/app/admin/invoices/page.tsx` - 견적서 목록 페이지
+- `src/lib/services/invoice.service.ts` - 목록 조회 서비스
+- `src/components/admin/invoice-table.tsx` - 견적서 테이블 컴포넌트 (상태 배지 통합)
 - 페이지네이션 및 정렬 로직
 
 **완료 기준**:
@@ -180,9 +179,9 @@
 
 **구현 내용**:
 
-- `/components/admin/SearchBar.tsx` - 검색 입력 컴포넌트
-- `/components/admin/FilterPanel.tsx` - 필터 패널 컴포넌트
-- `/lib/utils/search-filter.ts` - 검색 및 필터링 유틸리티
+- `src/components/admin/search-bar.tsx` - 검색 입력 컴포넌트
+- `src/components/admin/filter-panel.tsx` - 필터 패널 컴포넌트
+- 검색/필터링 로직은 각 컴포넌트 내 통합 구현 (URL 쿼리 파라미터 기반)
 - URL 쿼리 파라미터 기반 상태 관리
 - 디바운싱 처리된 검색 로직
 
@@ -199,8 +198,8 @@
 
 **구현 내용**:
 
-- `/lib/utils/link-generator.ts` - 링크 생성 유틸리티
-- `/components/admin/LinkColumn.tsx` - 링크 표시 컬럼 컴포넌트
+- `src/lib/utils/link-generator.ts` - 링크 생성 유틸리티
+- `src/components/admin/link-display.tsx` - 링크 표시 컴포넌트
 - 견적서 테이블에 링크 컬럼 추가
 - 짧은 URL 형식 옵션 (선택사항)
 - QR 코드 생성 라이브러리 연동 (선택사항)
@@ -218,9 +217,9 @@
 
 **구현 내용**:
 
-- `/components/admin/CopyButton.tsx` - 복사 버튼 컴포넌트
-- `/hooks/useClipboard.ts` - 클립보드 커스텀 훅
-- `/components/ui/toast.tsx` - 토스트 알림 컴포넌트
+- `src/components/admin/copy-button.tsx` - 복사 버튼 컴포넌트
+- `src/hooks/use-clipboard.ts` - 클립보드 커스텀 훅
+- 토스트 알림은 `sonner` 라이브러리 직접 사용 (`<Toaster />` 프로바이더는 루트 레이아웃에 배치)
 - 복사 성공/실패 피드백 애니메이션
 - 브라우저 호환성 처리
 
@@ -238,9 +237,9 @@
 **구현 내용**:
 
 - `next-themes` 라이브러리 설치 및 설정
-- `/app/providers.tsx` - 테마 프로바이더 설정
-- `/styles/themes.css` - 다크모드 CSS 변수 정의
-- TailwindCSS dark: 클래스 설정
+- `src/components/providers/theme-provider.tsx` - 테마 프로바이더 컴포넌트
+- `src/app/globals.css` - 다크모드 CSS 변수 정의 (`.dark` 블록, OKLCH 색상)
+- TailwindCSS v4 `@custom-variant dark` 기반 다크모드 설정
 - 시스템 테마 감지 로직
 
 **완료 기준**:
@@ -259,7 +258,6 @@
 - 모든 shadcn/ui 컴포넌트에 다크모드 클래스 추가
 - 견적서 조회 페이지 다크모드 스타일
 - 관리자 대시보드 다크모드 스타일
-- 차트 및 그래프 다크모드 대응
 - PDF 미리보기 다크모드 처리
 
 **완료 기준**:
